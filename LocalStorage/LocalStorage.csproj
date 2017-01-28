@@ -1,6 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp1.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Juliën Hanssens</Authors>
+    <Company />
+    <PackageProjectUrl>https://github.com/hanssens/localstorage-for-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hanssens/localstorage-for-dotnet</RepositoryUrl>
+    <PackageTags>c#, dotnet, local, storage</PackageTags>
+    <Description>A simple and lightweight tool for persisting data in dotnet (core) apps.</Description>
+    <RepositoryType>git</RepositoryType>
+    <PackageIconUrl>https://d17oy1vhnax1f7.cloudfront.net/items/1x2w321G3u3x2z0g120Q/hanssens-beer.png</PackageIconUrl>
+    <PackageLicenseUrl>https://github.com/hanssens/localstorage-for-dotnet/blob/master/LICENSE</PackageLicenseUrl>
+    <Version>1.0.0-preview</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
