@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System;
+using System.Diagnostics;
 using System.IO;
 using Xunit;
 
@@ -178,6 +179,26 @@ namespace LocalStorage.Tests
             var target = storage.Get(key);
             target.Should().BeOfType<string>();
             target.Should().Be(expectedValue);
+        }
+
+        [Fact(DisplayName = "LocalStorage should perform decently with large collections")]
+        public void LocalStorage_Should_Perform_Decently_With_Large_Collections()
+        {
+            // arrange - create a larger collection (100K records)
+            var stopwatch = Stopwatch.StartNew();
+            var storage = new LocalStorage();
+            for (var i = 0; i < 100000; i++)
+                storage.Store(Guid.NewGuid().ToString(), i);
+
+            storage.Persist();
+
+            // act - create new instance (e.g. load the larger collection from disk)
+            var target = new LocalStorage();
+            target.Clear();
+            stopwatch.Stop();
+
+            // assert - make sure the entire operation is done in < 1sec. (psychological boundry, if you will)
+            stopwatch.ElapsedMilliseconds.Should().BeLessOrEqualTo(1000);
         }
     }
 }
