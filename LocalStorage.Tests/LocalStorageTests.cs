@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using System;
 using System.IO;
 using Xunit;
@@ -160,6 +160,24 @@ namespace LocalStorage.Tests
             var target2 = storage3.Get<string>(key2);
             target1.Should().Be(value1);
             target2.Should().Be(value2);
+        }
+
+        [Fact(DisplayName = "LocalStorage should support unicode")]
+        public void LocalStorage_Store_Should_Support_Unicode()
+        {
+            // arrange
+            var key = Guid.NewGuid().ToString();
+            const string expectedValue = "Juliën's Special Characters: ~!@#$%^&*()œōøęsæ";
+            var storage = new LocalStorage();
+
+            // act
+            storage.Store(key, expectedValue);
+            storage.Persist();
+
+            // assert
+            var target = storage.Get(key);
+            target.Should().BeOfType<string>();
+            target.Should().Be(expectedValue);
         }
     }
 }
