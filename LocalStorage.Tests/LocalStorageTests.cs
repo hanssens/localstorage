@@ -103,7 +103,7 @@ namespace LocalStorage.Tests
         {
             // arrange - make sure something is stored in the LocalStorage
             var storage = new LocalStorage();
-            var filepath = storage.GetLocalStoreFilePath();
+            var filepath = Helpers.GetLocalStoreFilePath();
             var key = Guid.NewGuid().ToString();
             var value = Guid.NewGuid();
             storage.Store(key, value);

@@ -17,9 +17,9 @@ namespace LocalStorage
 
         public LocalStorage()
         {
-            if (File.Exists(GetLocalStoreFilePath()))
+            if (File.Exists(Helpers.GetLocalStoreFilePath()))
             {
-                var serializedContent = File.ReadAllText(GetLocalStoreFilePath());
+                var serializedContent = File.ReadAllText(Helpers.GetLocalStoreFilePath());
 
                 if (string.IsNullOrEmpty(serializedContent)) return;
 
@@ -33,7 +33,7 @@ namespace LocalStorage
         public void Clear()
         {
             Storage.Clear();
-            File.WriteAllText(GetLocalStoreFilePath(), string.Empty);
+            File.WriteAllText(Helpers.GetLocalStoreFilePath(), string.Empty);
         }
 
         /// <summary>
@@ -80,13 +80,6 @@ namespace LocalStorage
             return predicate == null ? collection : collection.Where(predicate);
         }
 
-        internal string GetLocalStoreFilePath()
-        {
-            const string filename = ".localstorage";
-            var fullPath = Path.Combine(System.AppContext.BaseDirectory, filename);
-            return fullPath;
-        }
-
         /// <summary>
         /// Persists the in-memory store to disk.
         /// </summary>
@@ -94,7 +87,7 @@ namespace LocalStorage
         {
             var serialized = JsonConvert.SerializeObject(Storage);
 
-            using (var fileStream = new FileStream(GetLocalStoreFilePath(), FileMode.OpenOrCreate, FileAccess.Write))
+            using (var fileStream = new FileStream(Helpers.GetLocalStoreFilePath(), FileMode.OpenOrCreate, FileAccess.Write))
             {
                 using (var writer = new StreamWriter(fileStream))
                 {
