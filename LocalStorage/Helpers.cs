@@ -7,9 +7,8 @@ namespace LocalStorage
 {
     internal class Helpers
     {
-        internal static string GetLocalStoreFilePath()
+        internal static string GetLocalStoreFilePath(string filename)
         {
-            const string filename = ".localstorage";
             return Path.Combine(System.AppContext.BaseDirectory, filename);
         }
     }

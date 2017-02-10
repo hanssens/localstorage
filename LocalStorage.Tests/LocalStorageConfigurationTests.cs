@@ -35,10 +35,10 @@ namespace LocalStorage.Tests
             var target = Helpers.GetLocalStoreFilePath(random_filename);
 
             // assert
-            File.Exists(random_filename).Should().BeTrue();
+            File.Exists(target).Should().BeTrue();
 
             // cleanup
-            File.Delete(random_filename);
+            File.Delete(target);
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 
 namespace LocalStorage
@@ -11,15 +9,25 @@ namespace LocalStorage
     public class LocalStorage
     {
         /// <summary>
+        /// Configurable behaviour for this LocalStorage instance.
+        /// </summary>
+        private readonly LocalStorageConfiguration _config;
+
+        /// <summary>
         /// Most current actual, in-memory state representation of the LocalStorage.
         /// </summary>
-        private Dictionary<string, string> Storage { get; set; } = new Dictionary<string, string>();
+        private Dictionary<string, string> Storage { get; } = new Dictionary<string, string>();
 
-        public LocalStorage()
+        public LocalStorage() : this(new LocalStorageConfiguration()) { }
+
+        public LocalStorage(LocalStorageConfiguration configuration)
         {
-            if (File.Exists(Helpers.GetLocalStoreFilePath()))
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+
+            _config = configuration;
+            if (File.Exists(Helpers.GetLocalStoreFilePath(_config.Filename)))
             {
-                var serializedContent = File.ReadAllText(Helpers.GetLocalStoreFilePath());
+                var serializedContent = File.ReadAllText(Helpers.GetLocalStoreFilePath(_config.Filename));
 
                 if (string.IsNullOrEmpty(serializedContent)) return;
 
@@ -33,7 +41,7 @@ namespace LocalStorage
         public void Clear()
         {
             Storage.Clear();
-            File.WriteAllText(Helpers.GetLocalStoreFilePath(), string.Empty);
+            File.WriteAllText(Helpers.GetLocalStoreFilePath(_config.Filename), string.Empty);
         }
 
         /// <summary>
@@ -87,7 +95,7 @@ namespace LocalStorage
         {
             var serialized = JsonConvert.SerializeObject(Storage);
 
-            using (var fileStream = new FileStream(Helpers.GetLocalStoreFilePath(), FileMode.OpenOrCreate, FileAccess.Write))
+            using (var fileStream = new FileStream(Helpers.GetLocalStoreFilePath(_config.Filename), FileMode.OpenOrCreate, FileAccess.Write))
             {
                 using (var writer = new StreamWriter(fileStream))
                 {
