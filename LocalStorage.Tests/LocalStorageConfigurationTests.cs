@@ -40,5 +40,17 @@ namespace LocalStorage.Tests
             // cleanup
             storage.Destroy();
         }
+
+        [Fact(DisplayName = "LocalStorageConfiguration.AutoSave should save changes to disk when enabled", Skip = "TODO")]
+        public void LocalStorageConfiguration_AutoSave_Should_Persist_When_Enabled()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact(DisplayName = "LocalStorageConfiguration.AutoSave should not save changes to disk when disabled", Skip = "TODO")]
+        public void LocalStorageConfiguration_AutoSave_Should_Not_Persist_When_Disabled()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
