@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace LocalStorage
 {    
-    public class LocalStorage
+    public class LocalStorage : IDisposable
     {
         /// <summary>
         /// Gets the number of elements contained in the LocalStorage.
@@ -122,6 +122,12 @@ namespace LocalStorage
                     writer.Write(serialized);
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            if (_config.AutoSave)
+                Persist();
         }
     }
 }
