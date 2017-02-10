@@ -41,6 +41,18 @@ namespace LocalStorage.Tests
             storage.Destroy();
         }
 
+        [Fact(DisplayName = "LocalStorageConfiguration.AutoLoad should load persisted state when enabled", Skip = "TODO")]
+        public void LocalStorageConfiguration_AutoLoad_Should_Load_Previous_State_OnLoad()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact(DisplayName = "LocalStorageConfiguration.AutoLoad should skip loading persisted state when disabled", Skip = "TODO")]
+        public void LocalStorageConfiguration_AutoLoad_Should_Skip_Loading_Previous_State_OnLoad()
+        {
+            throw new NotImplementedException();
+        }
+
         [Fact(DisplayName = "LocalStorageConfiguration.AutoSave should save changes to disk when enabled", Skip = "TODO")]
         public void LocalStorageConfiguration_AutoSave_Should_Persist_When_Enabled()
         {

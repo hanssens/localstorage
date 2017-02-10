@@ -21,7 +21,7 @@ namespace LocalStorage
         /// <summary>
         /// Most current actual, in-memory state representation of the LocalStorage.
         /// </summary>
-        private Dictionary<string, string> Storage { get; } = new Dictionary<string, string>();
+        private Dictionary<string, string> Storage { get; set; } = new Dictionary<string, string>();
 
         public LocalStorage() : this(new LocalStorageConfiguration()) { }
 
@@ -30,14 +30,9 @@ namespace LocalStorage
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
 
             _config = configuration;
-            if (File.Exists(Helpers.GetLocalStoreFilePath(_config.Filename)))
-            {
-                var serializedContent = File.ReadAllText(Helpers.GetLocalStoreFilePath(_config.Filename));
 
-                if (string.IsNullOrEmpty(serializedContent)) return;
-
-                Storage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serializedContent);
-            }
+            if (_config.AutoLoad)
+                Load();
         }
 
         /// <summary>
@@ -83,6 +78,24 @@ namespace LocalStorage
             if (succeeded) return JsonConvert.DeserializeObject<T>(raw);
 
             throw new ArgumentNullException($"Could not find key '{key}' in the LocalStorage.");
+        }
+
+        /// <summary>
+        /// Loads the persisted state from disk into memory, overriding the current memory instance.
+        /// </summary>
+        /// <remarks>
+        /// Simply doesn't do anything if the file is not found on disk.
+        /// </remarks>
+        public void Load()
+        {
+            if (!File.Exists(Helpers.GetLocalStoreFilePath(_config.Filename))) return;
+
+            var serializedContent = File.ReadAllText(Helpers.GetLocalStoreFilePath(_config.Filename));
+
+            if (string.IsNullOrEmpty(serializedContent)) return;
+
+            Storage.Clear();
+            Storage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serializedContent);
         }
 
         /// <summary>

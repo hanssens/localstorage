@@ -10,6 +10,14 @@ namespace LocalStorage
     public class LocalStorageConfiguration : ILocalStorageConfiguration
     {
         /// <summary>
+        /// Indicates if LocalStorage should automatically load previously persisted state from disk, when it is initialized (defaults to true).
+        /// </summary>
+        /// <remarks>
+        /// Requires manually to call Load() when disabled.
+        /// </remarks>
+        public bool AutoLoad { get; set; } = true;
+
+        /// <summary>
         /// Indicates if LocalStorage should automatically persist the latest state to disk, on dispose (defaults to true).
         /// </summary>
         /// <remarks>
