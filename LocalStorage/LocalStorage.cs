@@ -5,7 +5,10 @@ using System.Linq;
 using Newtonsoft.Json;
 
 namespace LocalStorage
-{    
+{
+    /// <summary>
+    /// A simple and lightweight tool for persisting data in dotnet (core) apps.
+    /// </summary>
     public class LocalStorage : IDisposable
     {
         /// <summary>
