@@ -36,12 +36,28 @@ namespace LocalStorage
         }
 
         /// <summary>
-        /// Clears the contents of the LocalStorage, both in-memory as well as the persisted state on disk.
+        /// Clears the contents of the LocalStorage, both in-memory as well as *contents* of the persisted state on disk.
         /// </summary>
+        /// <remarks>
+        /// Use the Destroy method to 
+        /// </remarks>
         public void Clear()
         {
             Storage.Clear();
             File.WriteAllText(Helpers.GetLocalStoreFilePath(_config.Filename), string.Empty);
+        }
+
+        /// <summary>
+        /// Deletes the persisted file on disk, if it exists, but keeps the in-memory data intact.
+        /// </summary>
+        /// <remarks>
+        /// Use the Clear method to clear only the in-memory contents.
+        /// </remarks>
+        public void Destroy()
+        {
+            var filepath = Helpers.GetLocalStoreFilePath(_config.Filename);
+            if (File.Exists(filepath))
+                File.Delete(Helpers.GetLocalStoreFilePath(_config.Filename));
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace LocalStorage.Tests
             File.Exists(target).Should().BeTrue();
 
             // cleanup
-            File.Delete(target);
+            storage.Destroy();
         }
     }
 }

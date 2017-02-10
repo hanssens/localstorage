@@ -242,10 +242,25 @@ namespace LocalStorage.Tests
             target.All(c => c.Brand == expected_brand);
         }
 
-        [Fact]
-        public void LocalStorage_AsEnumerable_Should_Cast_IEnumerable()
+        [Fact(DisplayName = "LocalStorage.Destroy() should delete file on disk")]
+        public void LocalStorage_Destroy_Should_Delete_File_On_Disk()
         {
-            var storage = new LocalStorage();
+            // arrange
+            var random_filename = Guid.NewGuid().ToString("N");
+            var filepath = Helpers.GetLocalStoreFilePath(random_filename);
+            var config = new LocalStorageConfiguration()
+            {
+                Filename = random_filename
+            };
+            
+            var storage = new LocalStorage(config);
+            storage.Persist();
+
+            // act 
+            storage.Destroy();
+
+            // assert
+            File.Exists(filepath).Should().BeFalse();
         }
     }
 }
