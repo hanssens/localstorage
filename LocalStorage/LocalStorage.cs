@@ -5,14 +5,12 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 
-[assembly: InternalsVisibleTo("LocalStorage.Tests")]
-
 namespace LocalStorage
 {    
     public class LocalStorage
     {
         /// <summary>
-        /// Actual, in-memory state representation of the LocalStorage.
+        /// Most current actual, in-memory state representation of the LocalStorage.
         /// </summary>
         private Dictionary<string, string> Storage { get; set; } = new Dictionary<string, string>();
 
