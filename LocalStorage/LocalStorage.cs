@@ -9,6 +9,11 @@ namespace LocalStorage
     public class LocalStorage
     {
         /// <summary>
+        /// Gets the number of elements contained in the LocalStorage.
+        /// </summary>
+        public int Count => Storage.Count;
+
+        /// <summary>
         /// Configurable behaviour for this LocalStorage instance.
         /// </summary>
         private readonly LocalStorageConfiguration _config;
@@ -36,15 +41,14 @@ namespace LocalStorage
         }
 
         /// <summary>
-        /// Clears the contents of the LocalStorage, both in-memory as well as *contents* of the persisted state on disk.
+        /// Clears the in-memory contents of the LocalStorage, but leaves any persisted state on disk intact.
         /// </summary>
         /// <remarks>
-        /// Use the Destroy method to 
+        /// Use the Destroy method to delete the persisted file on disk.
         /// </remarks>
         public void Clear()
         {
             Storage.Clear();
-            File.WriteAllText(Helpers.GetLocalStoreFilePath(_config.Filename), string.Empty);
         }
 
         /// <summary>

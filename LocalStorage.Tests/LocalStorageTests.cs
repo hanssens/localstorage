@@ -98,7 +98,7 @@ namespace LocalStorage.Tests
             target3.Should().Be(value3);
         }
 
-        [Fact(DisplayName = "LocalStorage.Clear() should clear all content")]
+        [Fact(DisplayName = "LocalStorage.Clear() should clear all in-memory content")]
         public void LocalStorage_Clear_Should_Clear_All_Content()
         {
             // arrange - make sure something is stored in the LocalStorage
@@ -113,8 +113,7 @@ namespace LocalStorage.Tests
             storage.Clear();
 
             // assert - open the file here and make sure the contents are empty
-            var target = File.ReadAllText(filepath);
-            target.Should().BeNullOrEmpty();
+            storage.Count.Should().Be(0);
         }
 
         [Fact(DisplayName = "LocalStorage.Persist() should leave previous entries intact")]
