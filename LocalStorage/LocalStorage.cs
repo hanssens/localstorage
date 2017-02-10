@@ -2,17 +2,16 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
-
-[assembly: InternalsVisibleTo("LocalStorage.Tests")]
 
 namespace LocalStorage
 {    
     public class LocalStorage
     {
         /// <summary>
-        /// Actual, in-memory state representation of the LocalStorage.
+        /// Most current actual, in-memory state representation of the LocalStorage.
         /// </summary>
         private Dictionary<string, string> Storage { get; set; } = new Dictionary<string, string>();
 
@@ -70,6 +69,15 @@ namespace LocalStorage
 
             var value = JsonConvert.SerializeObject(instance);
             Storage.Add(key, value);
+        }
+
+        /// <summary>
+        /// Syntax sugar that transforms the response to an IEnumerable<T>, whilst also passing along an optional WHERE-clause. 
+        /// </summary>
+        public IEnumerable<T> Query<T>(string key, Func<T, bool> predicate = null)
+        {
+            var collection = Get<IEnumerable<T>>(key);
+            return predicate == null ? collection : collection.Where(predicate);
         }
 
         internal string GetLocalStoreFilePath()

@@ -1,7 +1,10 @@
 ﻿using FluentAssertions;
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using LocalStorage.Tests.Stubs;
 using Xunit;
 
 namespace LocalStorage.Tests
@@ -199,6 +202,50 @@ namespace LocalStorage.Tests
 
             // assert - make sure the entire operation is done in < 1sec. (psychological boundry, if you will)
             stopwatch.ElapsedMilliseconds.Should().BeLessOrEqualTo(1000);
+        }
+
+        [Fact(DisplayName = "LocalStorage.Query() should cast to a collection")]
+        public void LocalStorage_Query_Should_Cast_Response_To_Collection()
+        {
+            // arrange - persist a collection to storage
+            var collection = CarFactory.Create();
+            var storage = new LocalStorage();
+            var key = Guid.NewGuid().ToString();
+            var expected_amount = collection.Count();
+            storage.Store(key, collection);
+
+            // act - fetch directly as a collection, passing along a where-clause
+            var target = storage.Query<Car>(key);
+
+            // assert
+            target.Should().NotBeNull();
+            target.Count().Should().Be(expected_amount);
+        }
+
+        [Fact(DisplayName = "LocalStorage.Query() should respect a provided predicate")]
+        public void LocalStorage_Query_Should_Respect_Provided_Predicate()
+        {
+            // arrange - persist a collection to storage
+            var collection = CarFactory.Create();
+            var storage = new LocalStorage();
+            var key = Guid.NewGuid().ToString();
+            var expected_brand = "BMW";
+            var expected_amount = collection.Count(c => c.Brand == expected_brand);
+            storage.Store(key, collection);
+
+            // act - fetch directly as a collection, passing along a where-clause
+            var target = storage.Query<Car>(key, c => c.Brand == expected_brand);
+
+            // assert
+            target.Should().NotBeNull();
+            target.Count().Should().Be(expected_amount);
+            target.All(c => c.Brand == expected_brand);
+        }
+
+        [Fact]
+        public void LocalStorage_AsEnumerable_Should_Cast_IEnumerable()
+        {
+            var storage = new LocalStorage();
         }
     }
 }
