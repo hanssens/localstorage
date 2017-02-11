@@ -18,6 +18,15 @@ namespace LocalStorage.Tests
             target.Should().NotBeNull();
         }
 
+        [Fact(DisplayName = "LocalStorage should implement IDisposable")]
+        public void LocalStorage_Should_Implement_IDisposable()
+        {
+            using (var target = new LocalStorage())
+            {
+                target.Should().NotBeNull();
+            }
+        }
+
         [Fact(DisplayName = "LocalStorage.Store() should persist simple string")]
         public void LocalStorage_Store_Should_Persist_Simple_String()
         {
