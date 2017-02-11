@@ -98,6 +98,27 @@ namespace LocalStorage.Tests
             target3.Should().Be(value3);
         }
 
+        [Fact(DisplayName = "LocalStorage.Store() should overwrite existing key")]
+        public void LocalStorage_Store_Should_Overwrite_Existing_Key()
+        {
+            // arrange
+            const string key = "I-Will-Be-Used-Twice";
+            var storage = new LocalStorage();
+            var original_value = new Joke { Id = 1, Text = "Yo mammo is so fat..." };
+            storage.Store(key, original_value);
+            storage.Persist();
+            var expected_value = new Joke { Id = 2, Text = "... she left the house in high heels and when she came back she had on flip flops" };
+
+            // act - overwrite the existing value
+            storage.Store(key, expected_value);
+            storage.Persist();
+            var target = storage.Get<Joke>(key);
+
+            // assert - last stored value should be the truth
+            target.Should().NotBeNull();
+            target.ShouldBeEquivalentTo(expected_value);
+        }
+
         [Fact(DisplayName = "LocalStorage.Clear() should clear all in-memory content")]
         public void LocalStorage_Clear_Should_Clear_All_Content()
         {
