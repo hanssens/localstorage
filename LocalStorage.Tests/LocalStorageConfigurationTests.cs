@@ -1,13 +1,10 @@
-﻿using FluentAssertions;
-using System;
-using System.Collections;
-using System.Diagnostics;
+﻿using System;
 using System.IO;
-using System.Linq;
-using LocalStorage.Tests.Stubs;
+using FluentAssertions;
+using Hanssens.Net;
 using Xunit;
 
-namespace LocalStorage.Tests
+namespace LocalStorageTests
 {
     public class LocalStorageConfigurationTests
     {
@@ -30,7 +27,7 @@ namespace LocalStorage.Tests
             };
 
             // act - store the container
-            var storage = new LocalStorage(config);
+            var storage = new Hanssens.Net.LocalStorage(config);
             storage.Persist();
             var target = Helpers.GetLocalStoreFilePath(random_filename);
 

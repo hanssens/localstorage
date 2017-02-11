@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace LocalStorage
+namespace Hanssens.Net
 {
     /// <summary>
     /// A simple and lightweight tool for persisting data in dotnet (core) apps.
@@ -112,6 +112,10 @@ namespace LocalStorage
             if (instance == null) throw new ArgumentNullException(nameof(instance));
 
             var value = JsonConvert.SerializeObject(instance);
+
+            if (Storage.Keys.Contains(key))
+                Storage.Remove(key);
+
             Storage.Add(key, value);
         }
 

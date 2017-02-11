@@ -1,4 +1,4 @@
-﻿namespace LocalStorage
+﻿namespace Hanssens.Net
 {
     public interface ILocalStorageConfiguration
     {
