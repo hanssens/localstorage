@@ -1,10 +1,28 @@
 # LocalStorage for .NET
 
-## About LocalStorage
+## What is LocalStorage?
+--------------------------------
 
-The LocalStorage tool allows you to store and access objects in a simple, frictionless way. It is designed to serve one single purpose: having a **simple solution for persisting objects**, even between sessions.
+LocalStorage is a simple utility that solves a common problem pragmatically - storing and accessing objects quickly in a .NET app. It is designed with a specific vision in mind: provide a **simple solution for persisting objects**, even between sessions, that is unobtrusive and requires zero configuration.
 
-It should be noted that LocalStorage is in no way useful as a durable, redundant or distributed storage system. It is a **lightweight tool for persisting data** - and it should be treated as such. 
+## Getting Started
+--------------------------------
 
-The inspiration behind LocalStorage is the [Window.localStorage as you may know if from Javascript](https://developer.mozilla.org/nl/docs/Web/API/Window/localStorage). It is lean and mean. It works. We use it all the time. But, like like Javascript's localStorage, the LocalStorage for .NET is not meant as a replacement for a dedicated caching or database mechanism. Keep in mind, it is a **lightweight tool for persisting data** - and it should be treated as such.
+First, you might want to dive into the [examples in this document](#examples). Want more, have a look [at the tests](https://github.com/hanssens/localstorage-for-dotnet/tree/master/LocalStorage.Tests). 
 
+Once you're game, simply add it to your project [through NuGet](https://www.nuget.org/packages/LocalStorage).
+
+NuGet Package Manager: 
+
+    $ Install-Package LocalStorage
+
+NuGet CLI:
+
+    $ nuget install LocalStorage
+
+## If you've got an issue...
+--------------------------------
+
+... [grab a tissue](https://www.youtube.com/watch?v=UmnN3eVMWgA). No, seriously; don't hesitate to [post an issue](https://github.com/hanssens/localstorage-for-dotnet/issues), or send me a message at [@jhanssens](https://twitter.com/jhanssens).
+
+LocalStorage is Copyright &copy; 2016-2017 [Juliën Hanssens](https://hanssens.com) under the [MIT license](LICENSE.txt).
