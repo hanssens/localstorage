@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LocalStorage
+﻿namespace Hanssens.Net
 {
     /// <summary>
     /// Provides options to configure LocalStorage to behave just like you want it.

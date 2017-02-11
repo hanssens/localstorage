@@ -12,6 +12,7 @@
     <PackageIconUrl>https://d17oy1vhnax1f7.cloudfront.net/items/1x2w321G3u3x2z0g120Q/hanssens-beer.png</PackageIconUrl>
     <PackageLicenseUrl>https://github.com/hanssens/localstorage-for-dotnet/blob/master/LICENSE</PackageLicenseUrl>
     <Version>1.0.0-preview</Version>
+    <RootNamespace>Hanssens.Net</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />

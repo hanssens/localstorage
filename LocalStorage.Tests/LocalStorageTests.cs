@@ -1,13 +1,13 @@
 ﻿using FluentAssertions;
+using Hanssens.Net;
 using System;
-using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using LocalStorage.Tests.Stubs;
 using Xunit;
+using LocalStorageTests.Stubs;
 
-namespace LocalStorage.Tests
+namespace LocalStorageTests
 {
     public class LocalStorageTests
     {
