@@ -230,6 +230,9 @@ namespace LocalStorageTests
             target.Clear();
             stopwatch.Stop();
 
+            // cleanup - delete the (large!) persisted file
+            target.Destroy();
+
             // assert - make sure the entire operation is done in < 1sec. (psychological boundry, if you will)
             stopwatch.ElapsedMilliseconds.Should().BeLessOrEqualTo(1000);
         }
