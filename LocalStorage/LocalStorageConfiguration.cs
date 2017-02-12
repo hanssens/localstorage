@@ -22,6 +22,11 @@
         public bool AutoSave { get; set; } = true;
 
         /// <summary>
+        /// Indicates if LocalStorage should encrypt its contents when persisting to disk.
+        /// </summary>
+        public bool EnableEncryption { get; set; } = false;
+
+        /// <summary>
         /// Filename for the persisted state on disk (defaults to ".localstorage").
         /// </summary>
         public string Filename { get; set; } = ".localstorage";
