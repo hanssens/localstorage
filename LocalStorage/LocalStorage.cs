@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Hanssens.Net.Helpers;
 using Newtonsoft.Json;
 
 namespace Hanssens.Net
@@ -69,9 +70,9 @@ namespace Hanssens.Net
         /// </remarks>
         public void Destroy()
         {
-            var filepath = Helpers.GetLocalStoreFilePath(_config.Filename);
+            var filepath = FileHelpers.GetLocalStoreFilePath(_config.Filename);
             if (File.Exists(filepath))
-                File.Delete(Helpers.GetLocalStoreFilePath(_config.Filename));
+                File.Delete(FileHelpers.GetLocalStoreFilePath(_config.Filename));
         }
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace Hanssens.Net
             if (!succeeded) throw new ArgumentNullException($"Could not find key '{key}' in the LocalStorage.");
 
             if (_config.EnableEncryption)
-                raw = Helpers.Decrypt(_encryptionKey, raw);
+                raw = CryptographyHelpers.Decrypt(_encryptionKey, raw);
 
             return JsonConvert.DeserializeObject<T>(raw);
         }
@@ -106,9 +107,9 @@ namespace Hanssens.Net
         /// </remarks>
         public void Load()
         {
-            if (!File.Exists(Helpers.GetLocalStoreFilePath(_config.Filename))) return;
+            if (!File.Exists(FileHelpers.GetLocalStoreFilePath(_config.Filename))) return;
 
-            var serializedContent = File.ReadAllText(Helpers.GetLocalStoreFilePath(_config.Filename));
+            var serializedContent = File.ReadAllText(FileHelpers.GetLocalStoreFilePath(_config.Filename));
 
             if (string.IsNullOrEmpty(serializedContent)) return;
 
@@ -132,7 +133,7 @@ namespace Hanssens.Net
                 Storage.Remove(key);
 
             if (_config.EnableEncryption)
-                value = Helpers.Encrypt(_encryptionKey, value);
+                value = CryptographyHelpers.Encrypt(_encryptionKey, value);
 
             Storage.Add(key, value);
         }
@@ -153,7 +154,7 @@ namespace Hanssens.Net
         {
             var serialized = JsonConvert.SerializeObject(Storage);
 
-            using (var fileStream = new FileStream(Helpers.GetLocalStoreFilePath(_config.Filename), FileMode.OpenOrCreate, FileAccess.Write))
+            using (var fileStream = new FileStream(FileHelpers.GetLocalStoreFilePath(_config.Filename), FileMode.OpenOrCreate, FileAccess.Write))
             {
                 using (var writer = new StreamWriter(fileStream))
                 {

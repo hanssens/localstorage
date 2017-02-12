@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Hanssens.Net.Helpers;
 using Xunit;
 using LocalStorageTests.Stubs;
 
@@ -133,7 +134,7 @@ namespace LocalStorageTests
         {
             // arrange - make sure something is stored in the LocalStorage
             var storage = new LocalStorage();
-            var filepath = Helpers.GetLocalStoreFilePath(".localstorage");
+            var filepath = FileHelpers.GetLocalStoreFilePath(".localstorage");
             var key = Guid.NewGuid().ToString();
             var value = Guid.NewGuid();
             storage.Store(key, value);
@@ -276,7 +277,7 @@ namespace LocalStorageTests
         {
             // arrange
             var random_filename = Guid.NewGuid().ToString("N");
-            var filepath = Helpers.GetLocalStoreFilePath(random_filename);
+            var filepath = FileHelpers.GetLocalStoreFilePath(random_filename);
             var config = new LocalStorageConfiguration()
             {
                 Filename = random_filename
