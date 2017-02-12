@@ -94,7 +94,7 @@ namespace Hanssens.Net
             if (!succeeded) throw new ArgumentNullException($"Could not find key '{key}' in the LocalStorage.");
 
             if (_config.EnableEncryption)
-                raw = CryptographyHelpers.Decrypt(_encryptionKey, raw);
+                raw = CryptographyHelpers.Decrypt(_encryptionKey, _config.EncryptionSalt, raw);
 
             return JsonConvert.DeserializeObject<T>(raw);
         }
@@ -133,7 +133,7 @@ namespace Hanssens.Net
                 Storage.Remove(key);
 
             if (_config.EnableEncryption)
-                value = CryptographyHelpers.Encrypt(_encryptionKey, value);
+                value = CryptographyHelpers.Encrypt(_encryptionKey, _config.EncryptionSalt, value);
 
             Storage.Add(key, value);
         }
