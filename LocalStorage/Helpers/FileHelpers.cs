@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
-namespace Hanssens.Net
+namespace Hanssens.Net.Helpers
 {
-    internal class Helpers
+    internal static class FileHelpers
     {
         internal static string GetLocalStoreFilePath(string filename)
         {

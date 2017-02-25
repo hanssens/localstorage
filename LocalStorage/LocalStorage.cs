@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Hanssens.Net.Helpers;
 using Newtonsoft.Json;
 
 namespace Hanssens.Net
@@ -22,17 +23,29 @@ namespace Hanssens.Net
         private readonly LocalStorageConfiguration _config;
 
         /// <summary>
+        /// User-provided encryption key, used for encrypting/decrypting values.
+        /// </summary>
+        private readonly string _encryptionKey;
+
+        /// <summary>
         /// Most current actual, in-memory state representation of the LocalStorage.
         /// </summary>
         private Dictionary<string, string> Storage { get; set; } = new Dictionary<string, string>();
 
         public LocalStorage() : this(new LocalStorageConfiguration()) { }
 
-        public LocalStorage(LocalStorageConfiguration configuration)
+        public LocalStorage(LocalStorageConfiguration configuration) : this(configuration, string.Empty) { }
+
+        public LocalStorage(LocalStorageConfiguration configuration, string encryptionKey)
         {
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
 
             _config = configuration;
+
+            if (_config.EnableEncryption) {
+                if (string.IsNullOrEmpty(encryptionKey)) throw new ArgumentNullException(nameof(encryptionKey), "When EnableEncryption is enabled, an encryptionKey is required when initializing the LocalStorage.");
+                _encryptionKey = encryptionKey;
+            }
 
             if (_config.AutoLoad)
                 Load();
@@ -57,9 +70,9 @@ namespace Hanssens.Net
         /// </remarks>
         public void Destroy()
         {
-            var filepath = Helpers.GetLocalStoreFilePath(_config.Filename);
+            var filepath = FileHelpers.GetLocalStoreFilePath(_config.Filename);
             if (File.Exists(filepath))
-                File.Delete(Helpers.GetLocalStoreFilePath(_config.Filename));
+                File.Delete(FileHelpers.GetLocalStoreFilePath(_config.Filename));
         }
 
         /// <summary>
@@ -78,9 +91,12 @@ namespace Hanssens.Net
         public T Get<T>(string key)
         {
             var succeeded = Storage.TryGetValue(key, out string raw);
-            if (succeeded) return JsonConvert.DeserializeObject<T>(raw);
+            if (!succeeded) throw new ArgumentNullException($"Could not find key '{key}' in the LocalStorage.");
 
-            throw new ArgumentNullException($"Could not find key '{key}' in the LocalStorage.");
+            if (_config.EnableEncryption)
+                raw = CryptographyHelpers.Decrypt(_encryptionKey, _config.EncryptionSalt, raw);
+
+            return JsonConvert.DeserializeObject<T>(raw);
         }
 
         /// <summary>
@@ -91,9 +107,9 @@ namespace Hanssens.Net
         /// </remarks>
         public void Load()
         {
-            if (!File.Exists(Helpers.GetLocalStoreFilePath(_config.Filename))) return;
+            if (!File.Exists(FileHelpers.GetLocalStoreFilePath(_config.Filename))) return;
 
-            var serializedContent = File.ReadAllText(Helpers.GetLocalStoreFilePath(_config.Filename));
+            var serializedContent = File.ReadAllText(FileHelpers.GetLocalStoreFilePath(_config.Filename));
 
             if (string.IsNullOrEmpty(serializedContent)) return;
 
@@ -116,6 +132,9 @@ namespace Hanssens.Net
             if (Storage.Keys.Contains(key))
                 Storage.Remove(key);
 
+            if (_config.EnableEncryption)
+                value = CryptographyHelpers.Encrypt(_encryptionKey, _config.EncryptionSalt, value);
+
             Storage.Add(key, value);
         }
 
@@ -135,7 +154,7 @@ namespace Hanssens.Net
         {
             var serialized = JsonConvert.SerializeObject(Storage);
 
-            using (var fileStream = new FileStream(Helpers.GetLocalStoreFilePath(_config.Filename), FileMode.OpenOrCreate, FileAccess.Write))
+            using (var fileStream = new FileStream(FileHelpers.GetLocalStoreFilePath(_config.Filename), FileMode.OpenOrCreate, FileAccess.Write))
             {
                 using (var writer = new StreamWriter(fileStream))
                 {
