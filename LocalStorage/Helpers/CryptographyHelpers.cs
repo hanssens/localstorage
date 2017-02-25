@@ -81,12 +81,16 @@ namespace Hanssens.Net.Helpers
 
         private static byte[] ToByteArray(string input)
         {
-            return Encoding.Unicode.GetBytes(input);
+            // note: the Convert.FromBase64String function 
+            // does not accept certain characters, like '-',
+            // so strip these out first
+            var valid_base64 = input.Replace('-', '+');
+            return Convert.FromBase64String(valid_base64);
         }
 
         private static string ToString(byte[] input)
         {
-            return Encoding.Unicode.GetString(input);
+            return Convert.ToBase64String(input);
         }
 
         private static Tuple<byte[], byte[]> GetAesKeyAndIV(string password, string salt, SymmetricAlgorithm symmetricAlgorithm)

@@ -25,6 +25,23 @@ namespace LocalStorageTests
             target.Should().Be(original_value);
         }
 
+        [Fact(DisplayName = "Helpers.Decrypt() should decode an encrypted string with special characters")]
+        public void Decrypt_Should_Decode_An_Encrypted_String_With_Special_Characters()
+        {
+            // arrange
+            var key = Guid.NewGuid().ToString("N");
+            var salt = Guid.NewGuid().ToString("N");
+            var original_value = "Søm€ unicode s-tring+";
+            var encrypted_value = CryptographyHelpers.Encrypt(key, salt, original_value);
+
+            // act
+            var target = CryptographyHelpers.Decrypt(key, salt, encrypted_value);
+
+            // assert
+            target.Should().NotBeNullOrEmpty();
+            target.Should().Be(original_value);
+        }
+
         [Fact(DisplayName = "Helpers.Encrypt() should encrypt a string")]
         public void Encryption_Should_Encrypt_String()
         {
