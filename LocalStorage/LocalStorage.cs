@@ -92,6 +92,14 @@ namespace Hanssens.Net
         }
 
         /// <summary>
+        /// Gets a collection containing all the keys in the LocalStorage.
+        /// </summary>
+        public IReadOnlyCollection<string> Keys()
+        {
+            return Storage.Keys.OrderBy(x => x).ToList();
+        }
+
+        /// <summary>
         /// Loads the persisted state from disk into memory, overriding the current memory instance.
         /// </summary>
         /// <remarks>

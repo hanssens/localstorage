@@ -262,6 +262,38 @@ namespace LocalStorageTests
             target.Should().BeFalse();
         }
 
+        [Fact(DisplayName = "LocalStorage.Keys() should return collection of all keys")]
+        public void LocalStorage_Keys_Should_Return_Collection_Of_Keys()
+        {
+            // arrange
+            var storage = new LocalStorage(TestHelpers.UniqueInstance());
+            for (var i = 0; i < 10; i++)
+                storage.Store(Guid.NewGuid().ToString(), i);
+            var expected_keycount = storage.Count;
+
+            // act
+            var target = storage.Keys();
+
+            // assert
+            target.Should().NotBeNullOrEmpty();
+            target.Count.Should().Be(expected_keycount);
+        }
+
+        [Fact(DisplayName = "LocalStorage.Keys() should return 0 on empty collection")]
+        public void LocalStorage_Keys_Should_Return_Zero_On_Empty_Collection()
+        {
+            // arrange
+            var storage = new LocalStorage(TestHelpers.UniqueInstance());
+
+            // act
+            var target = storage.Keys();
+
+            // assert
+            target.Should().NotBeNull();
+            target.Should().BeEmpty();
+            target.Count.Should().Be(0, because: "nothing is added to the LocalStorage");
+        }
+
         [Fact(DisplayName = "LocalStorage.Query() should cast to a collection")]
         public void LocalStorage_Query_Should_Cast_Response_To_Collection()
         {
