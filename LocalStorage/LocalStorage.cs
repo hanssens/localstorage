@@ -63,6 +63,16 @@ namespace Hanssens.Net
         }
 
         /// <summary>
+        /// Determines whether this LocalStorage instance contains the specified key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool Exists(string key)
+        {
+            return Storage.ContainsKey(key: key);
+        }
+
+        /// <summary>
         /// Gets an object from the LocalStorage, without knowing its type.
         /// </summary>
         /// <param name="key">Unique key, as used when the object was stored.</param>

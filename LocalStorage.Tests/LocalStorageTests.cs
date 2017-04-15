@@ -233,6 +233,35 @@ namespace LocalStorageTests
             stopwatch.ElapsedMilliseconds.Should().BeLessOrEqualTo(1000);
         }
 
+        [Fact(DisplayName = "LocalStorage.Exists() should locate existing key")]
+        public void LocalStorage_Exists_Should_Locate_Existing_Key()
+        {
+            // arrange
+            var storage = new LocalStorage();
+            var expected_key = Guid.NewGuid().ToString();
+            storage.Store(expected_key, Guid.NewGuid().ToString());
+
+            // act
+            var target = storage.Exists(expected_key);
+
+            // assert
+            target.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "LocalStorage.Exists() should ignore non-existing key")]
+        public void LocalStorage_Exists_Should_Ignore_NonExisting_Key()
+        {
+            // arrange
+            var storage = new LocalStorage();
+            var nonexisting_key = Guid.NewGuid().ToString();
+
+            // act
+            var target = storage.Exists(nonexisting_key);
+
+            // assert
+            target.Should().BeFalse();
+        }
+
         [Fact(DisplayName = "LocalStorage.Query() should cast to a collection")]
         public void LocalStorage_Query_Should_Cast_Response_To_Collection()
         {
