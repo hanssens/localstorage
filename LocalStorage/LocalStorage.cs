@@ -19,7 +19,7 @@ namespace Hanssens.Net
         /// <summary>
         /// Configurable behaviour for this LocalStorage instance.
         /// </summary>
-        private readonly LocalStorageConfiguration _config;
+        private readonly ILocalStorageConfiguration _config;
 
         /// <summary>
         /// Most current actual, in-memory state representation of the LocalStorage.
@@ -28,11 +28,9 @@ namespace Hanssens.Net
 
         public LocalStorage() : this(new LocalStorageConfiguration()) { }
 
-        public LocalStorage(LocalStorageConfiguration configuration)
+        public LocalStorage(ILocalStorageConfiguration configuration)
         {
-            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
-
-            _config = configuration;
+            _config = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
             if (_config.AutoLoad)
                 Load();
