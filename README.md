@@ -99,3 +99,23 @@ Here is a sample configuration with all configurable members (and their default 
   
 * **Filename** (string)  
   Filename for the persisted state on disk (defaults to ".localstorage").
+
+* **EnableEncryption**  
+
+Security is an important feature. LocalStorage has support for encrypting the data, both in-memory as well as persisted on disk. 
+
+You only need to define a custom configuration indication that encryption should be enabled:
+
+	// setup a configuration with encryption enabled (defaults to 'false')
+	// note that adding EncryptionSalt is optional, but recommended
+	var config = new LocalStorageConfiguration() {
+		EnableEncryption = true,
+		EncryptionSalt = "(optional) add your own random salt string"
+	};
+
+	// initialize LocalStorage with a password of your choice
+	var encryptedStorage = new LocalStorage(config, "password");
+
+All write operations are first encrypted with AES, before they are persisted in-memory. In case of disk persistance, the encrypted value is respected. Although enabling encryption increases security, it does add a slight overhead to the Get/Store operations, in terms of performance.
+
+By design, only the values are encrypted and not the keys. 

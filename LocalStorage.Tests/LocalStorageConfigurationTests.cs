@@ -2,6 +2,8 @@
 using System.IO;
 using FluentAssertions;
 using Hanssens.Net;
+using Hanssens.Net.Helpers;
+using Microsoft.VisualStudio.TestPlatform.Utilities.Helpers;
 using Xunit;
 
 namespace LocalStorageTests
@@ -29,7 +31,7 @@ namespace LocalStorageTests
             // act - store the container
             var storage = new Hanssens.Net.LocalStorage(config);
             storage.Persist();
-            var target = Helpers.GetLocalStoreFilePath(random_filename);
+            var target = FileHelpers.GetLocalStoreFilePath(random_filename);
 
             // assert
             File.Exists(target).Should().BeTrue();
