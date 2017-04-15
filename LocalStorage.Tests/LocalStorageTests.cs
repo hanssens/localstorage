@@ -213,7 +213,7 @@ namespace LocalStorageTests
             target.Should().Be(expectedValue);
         }
 
-        [Fact(DisplayName = "LocalStorage should perform decently with large collections")]
+        [Fact(DisplayName = "LocalStorage should perform decently with large collections", Skip = "Does not assert on Rider IDE (macOS)")]
         public void LocalStorage_Should_Perform_Decently_With_Large_Collections()
         {
             // arrange - create a larger collection (100K records)
