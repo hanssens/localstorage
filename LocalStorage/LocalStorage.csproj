@@ -17,9 +17,9 @@
 https://github.com/hanssens/localstorage-for-dotnet/releases</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <Folder Include="Helpers" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Helpers" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 </Project>
