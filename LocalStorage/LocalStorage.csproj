@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Juliën Hanssens</Authors>
     <Company />
@@ -11,7 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageIconUrl>https://d17oy1vhnax1f7.cloudfront.net/items/1x2w321G3u3x2z0g120Q/hanssens-beer.png</PackageIconUrl>
     <PackageLicenseUrl>https://github.com/hanssens/localstorage-for-dotnet/blob/master/LICENSE</PackageLicenseUrl>
-    <Version>1.1.0</Version>
+    <Version>2.0.0-beta</Version>
     <RootNamespace>Hanssens.Net</RootNamespace>
     <PackageReleaseNotes>See the releases page on GitHub for release notes: 
 https://github.com/hanssens/localstorage-for-dotnet/releases</PackageReleaseNotes>
