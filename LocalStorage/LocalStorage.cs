@@ -168,7 +168,7 @@ namespace Hanssens.Net
         /// </summary>
         public void Persist()
         {
-            var serialized = JsonConvert.SerializeObject(Storage);
+            var serialized = JsonConvert.SerializeObject(Storage, Formatting.Indented);
 
             using (var fileStream = new FileStream(FileHelpers.GetLocalStoreFilePath(_config.Filename), FileMode.OpenOrCreate, FileAccess.Write))
             {
