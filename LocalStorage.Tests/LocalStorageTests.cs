@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using FluentAssertions.Common;
 using Hanssens.Net.Helpers;
 using Xunit;
 using LocalStorageTests.Stubs;
@@ -126,7 +127,7 @@ namespace LocalStorageTests
 
             // assert - last stored value should be the truth
             target.Should().NotBeNull();
-            target.ShouldBeEquivalentTo(expected_value);
+            target.IsSameOrEqualTo(expected_value);
         }
 
         [Fact(DisplayName = "LocalStorage.Clear() should clear all in-memory content")]
