@@ -6,7 +6,7 @@
     <Company />
     <PackageProjectUrl>https://github.com/hanssens/localstorage-for-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/hanssens/localstorage-for-dotnet</RepositoryUrl>
-    <PackageTags>c#, dotnet, local, storage</PackageTags>
+    <PackageTags>c#, dotnet, storage, cache, nosql, lightweight</PackageTags>
     <Description>A simple and lightweight tool for persisting data in dotnet (core) apps.</Description>
     <RepositoryType>git</RepositoryType>
     <PackageIconUrl>https://d17oy1vhnax1f7.cloudfront.net/items/1x2w321G3u3x2z0g120Q/hanssens-beer.png</PackageIconUrl>
