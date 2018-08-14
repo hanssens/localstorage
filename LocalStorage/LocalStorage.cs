@@ -31,6 +31,8 @@ namespace Hanssens.Net
         /// Most current actual, in-memory state representation of the LocalStorage.
         /// </summary>
         private Dictionary<string, string> Storage { get; set; } = new Dictionary<string, string>();
+        
+        private object writeLock = new object();
 
         public LocalStorage() : this(new LocalStorageConfiguration(), string.Empty) { }
 
@@ -170,10 +172,11 @@ namespace Hanssens.Net
         {
             var serialized = JsonConvert.SerializeObject(Storage, Formatting.Indented);
 
-            using (var fileStream = new FileStream(FileHelpers.GetLocalStoreFilePath(_config.Filename), FileMode.OpenOrCreate, FileAccess.Write))
             var writemode = File.Exists(FileHelpers.GetLocalStoreFilePath(_config.Filename))
                 ? FileMode.Truncate
                 : FileMode.Create;
+            
+            lock (writeLock)
             {
                 using (var fileStream = new FileStream(FileHelpers.GetLocalStoreFilePath(_config.Filename), 
                     mode: writemode, 
