@@ -215,7 +215,7 @@ namespace LocalStorageTests
             target.Should().Be(expectedValue);
         }
 
-        [Fact(DisplayName = "LocalStorage should perform decently with large collections", Skip = "Does not assert on Rider IDE (macOS)")]
+        [Fact(DisplayName = "LocalStorage should perform decently with large collections")]
         public void LocalStorage_Should_Perform_Decently_With_Large_Collections()
         {
             // arrange - create a larger collection (100K records)
@@ -236,6 +236,23 @@ namespace LocalStorageTests
 
             // assert - make sure the entire operation is done in < 1sec. (psychological boundry, if you will)
             stopwatch.ElapsedMilliseconds.Should().BeLessOrEqualTo(1000);
+        }
+        
+        [Fact(DisplayName = "LocalStorage should perform decently with many iterations collections")]
+        public void LocalStorage_Should_Perform_Decently_With_Many_Opens_And_Writes()
+        {
+            // arrange - iterate a lot of times through open/persist/close
+            for (var i = 0; i < 1000; i++)
+            {
+                var storage = new LocalStorage();
+                // storage.Clear();
+                storage.Store(Guid.NewGuid().ToString(), i);
+                storage.Persist();
+            }
+            
+            // cleanup
+            var store = new LocalStorage();
+            store.Destroy();
         }
 
         [Fact(DisplayName = "LocalStorage.Exists() should locate existing key")]
