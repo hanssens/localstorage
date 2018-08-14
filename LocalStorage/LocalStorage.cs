@@ -171,10 +171,18 @@ namespace Hanssens.Net
             var serialized = JsonConvert.SerializeObject(Storage, Formatting.Indented);
 
             using (var fileStream = new FileStream(FileHelpers.GetLocalStoreFilePath(_config.Filename), FileMode.OpenOrCreate, FileAccess.Write))
+            var writemode = File.Exists(FileHelpers.GetLocalStoreFilePath(_config.Filename))
+                ? FileMode.Truncate
+                : FileMode.Create;
             {
-                using (var writer = new StreamWriter(fileStream))
+                using (var fileStream = new FileStream(FileHelpers.GetLocalStoreFilePath(_config.Filename), 
+                    mode: writemode, 
+                    access: FileAccess.Write))
                 {
-                    writer.Write(serialized);
+                    using (var writer = new StreamWriter(fileStream))
+                    {
+                        writer.Write(serialized);
+                    }
                 }
             }
         }
