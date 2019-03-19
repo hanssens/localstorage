@@ -10,7 +10,7 @@
     <Description>A simple and lightweight tool for persisting data in dotnet (core) apps.</Description>
     <RepositoryType>git</RepositoryType>
     <PackageIconUrl>https://d17oy1vhnax1f7.cloudfront.net/items/1x2w321G3u3x2z0g120Q/hanssens-beer.png</PackageIconUrl>
-    <PackageLicenseUrl>https://github.com/hanssens/localstorage-for-dotnet/blob/master/LICENSE</PackageLicenseUrl>
+    <Title>LocalStorage</Title>
     <Version>2.0.0</Version>
     <RootNamespace>Hanssens.Net</RootNamespace>
     <PackageReleaseNotes>See the releases page on GitHub for release notes: 
