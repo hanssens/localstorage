@@ -11,7 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageIconUrl>https://d17oy1vhnax1f7.cloudfront.net/items/1x2w321G3u3x2z0g120Q/hanssens-beer.png</PackageIconUrl>
     <PackageLicenseUrl>https://github.com/hanssens/localstorage-for-dotnet/blob/master/LICENSE</PackageLicenseUrl>
-    <Version>2.0.0-beta-2</Version>
+    <Version>2.0.0-beta-3</Version>
     <RootNamespace>Hanssens.Net</RootNamespace>
     <PackageReleaseNotes>See the releases page on GitHub for release notes: 
 https://github.com/hanssens/localstorage-for-dotnet/releases</PackageReleaseNotes>
