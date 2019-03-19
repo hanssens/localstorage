@@ -24,6 +24,11 @@
         bool EnableEncryption { get; set; }
 
         /// <summary>
+        /// [Optional] Add a custom salt to encryption, when EnableEncryption is enabled.
+        /// </summary>
+        string EncryptionSalt { get; set; }
+
+        /// <summary>
         /// Filename for the persisted state on disk (defaults to ".localstorage").
         /// </summary>
         string Filename { get; set; }

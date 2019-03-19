@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using FluentAssertions.Common;
 using Hanssens.Net.Helpers;
 using Xunit;
 using LocalStorageTests.Stubs;
@@ -126,7 +127,7 @@ namespace LocalStorageTests
 
             // assert - last stored value should be the truth
             target.Should().NotBeNull();
-            target.ShouldBeEquivalentTo(expected_value);
+            target.IsSameOrEqualTo(expected_value);
         }
 
         [Fact(DisplayName = "LocalStorage.Clear() should clear all in-memory content")]
@@ -235,6 +236,84 @@ namespace LocalStorageTests
 
             // assert - make sure the entire operation is done in < 1sec. (psychological boundry, if you will)
             stopwatch.ElapsedMilliseconds.Should().BeLessOrEqualTo(1000);
+        }
+        
+        [Fact(DisplayName = "LocalStorage should perform decently with many iterations collections")]
+        public void LocalStorage_Should_Perform_Decently_With_Many_Opens_And_Writes()
+        {
+            // arrange - iterate a lot of times through open/persist/close
+            for (var i = 0; i < 1000; i++)
+            {
+                var storage = new LocalStorage();
+                // storage.Clear();
+                storage.Store(Guid.NewGuid().ToString(), i);
+                storage.Persist();
+            }
+            
+            // cleanup
+            var store = new LocalStorage();
+            store.Destroy();
+        }
+
+        [Fact(DisplayName = "LocalStorage.Exists() should locate existing key")]
+        public void LocalStorage_Exists_Should_Locate_Existing_Key()
+        {
+            // arrange
+            var storage = new LocalStorage();
+            var expected_key = Guid.NewGuid().ToString();
+            storage.Store(expected_key, Guid.NewGuid().ToString());
+
+            // act
+            var target = storage.Exists(expected_key);
+
+            // assert
+            target.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "LocalStorage.Exists() should ignore non-existing key")]
+        public void LocalStorage_Exists_Should_Ignore_NonExisting_Key()
+        {
+            // arrange
+            var storage = new LocalStorage();
+            var nonexisting_key = Guid.NewGuid().ToString();
+
+            // act
+            var target = storage.Exists(nonexisting_key);
+
+            // assert
+            target.Should().BeFalse();
+        }
+
+        [Fact(DisplayName = "LocalStorage.Keys() should return collection of all keys")]
+        public void LocalStorage_Keys_Should_Return_Collection_Of_Keys()
+        {
+            // arrange
+            var storage = new LocalStorage(TestHelpers.UniqueInstance());
+            for (var i = 0; i < 10; i++)
+                storage.Store(Guid.NewGuid().ToString(), i);
+            var expected_keycount = storage.Count;
+
+            // act
+            var target = storage.Keys();
+
+            // assert
+            target.Should().NotBeNullOrEmpty();
+            target.Count.Should().Be(expected_keycount);
+        }
+
+        [Fact(DisplayName = "LocalStorage.Keys() should return 0 on empty collection")]
+        public void LocalStorage_Keys_Should_Return_Zero_On_Empty_Collection()
+        {
+            // arrange
+            var storage = new LocalStorage(TestHelpers.UniqueInstance());
+
+            // act
+            var target = storage.Keys();
+
+            // assert
+            target.Should().NotBeNull();
+            target.Should().BeEmpty();
+            target.Count.Should().Be(0, because: "nothing is added to the LocalStorage");
         }
 
         [Fact(DisplayName = "LocalStorage.Query() should cast to a collection")]

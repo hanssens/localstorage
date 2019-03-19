@@ -20,7 +20,7 @@ namespace Hanssens.Net
         /// <summary>
         /// Configurable behaviour for this LocalStorage instance.
         /// </summary>
-        private readonly LocalStorageConfiguration _config;
+        private readonly ILocalStorageConfiguration _config;
 
         /// <summary>
         /// User-provided encryption key, used for encrypting/decrypting values.
@@ -31,16 +31,16 @@ namespace Hanssens.Net
         /// Most current actual, in-memory state representation of the LocalStorage.
         /// </summary>
         private Dictionary<string, string> Storage { get; set; } = new Dictionary<string, string>();
+        
+        private object writeLock = new object();
 
-        public LocalStorage() : this(new LocalStorageConfiguration()) { }
+        public LocalStorage() : this(new LocalStorageConfiguration(), string.Empty) { }
 
-        public LocalStorage(LocalStorageConfiguration configuration) : this(configuration, string.Empty) { }
+        public LocalStorage(ILocalStorageConfiguration configuration) : this(configuration, string.Empty) { }
 
-        public LocalStorage(LocalStorageConfiguration configuration, string encryptionKey)
+        public LocalStorage(ILocalStorageConfiguration configuration, string encryptionKey)
         {
-            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
-
-            _config = configuration;
+            _config = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
             if (_config.EnableEncryption) {
                 if (string.IsNullOrEmpty(encryptionKey)) throw new ArgumentNullException(nameof(encryptionKey), "When EnableEncryption is enabled, an encryptionKey is required when initializing the LocalStorage.");
@@ -76,6 +76,16 @@ namespace Hanssens.Net
         }
 
         /// <summary>
+        /// Determines whether this LocalStorage instance contains the specified key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool Exists(string key)
+        {
+            return Storage.ContainsKey(key: key);
+        }
+
+        /// <summary>
         /// Gets an object from the LocalStorage, without knowing its type.
         /// </summary>
         /// <param name="key">Unique key, as used when the object was stored.</param>
@@ -97,6 +107,14 @@ namespace Hanssens.Net
                 raw = CryptographyHelpers.Decrypt(_encryptionKey, _config.EncryptionSalt, raw);
 
             return JsonConvert.DeserializeObject<T>(raw);
+        }
+
+        /// <summary>
+        /// Gets a collection containing all the keys in the LocalStorage.
+        /// </summary>
+        public IReadOnlyCollection<string> Keys()
+        {
+            return Storage.Keys.OrderBy(x => x).ToList();
         }
 
         /// <summary>
@@ -152,13 +170,22 @@ namespace Hanssens.Net
         /// </summary>
         public void Persist()
         {
-            var serialized = JsonConvert.SerializeObject(Storage);
+            var serialized = JsonConvert.SerializeObject(Storage, Formatting.Indented);
 
-            using (var fileStream = new FileStream(FileHelpers.GetLocalStoreFilePath(_config.Filename), FileMode.OpenOrCreate, FileAccess.Write))
+            var writemode = File.Exists(FileHelpers.GetLocalStoreFilePath(_config.Filename))
+                ? FileMode.Truncate
+                : FileMode.Create;
+            
+            lock (writeLock)
             {
-                using (var writer = new StreamWriter(fileStream))
+                using (var fileStream = new FileStream(FileHelpers.GetLocalStoreFilePath(_config.Filename), 
+                    mode: writemode, 
+                    access: FileAccess.Write))
                 {
-                    writer.Write(serialized);
+                    using (var writer = new StreamWriter(fileStream))
+                    {
+                        writer.Write(serialized);
+                    }
                 }
             }
         }
