@@ -15,7 +15,7 @@ namespace Hanssens.Net
         public int Count => Storage.Count;
         private readonly ILocalStorageConfiguration _config;
         private readonly string _encryptionKey;
-        private Dictionary<string, string> Storage { get; set; } = new Dictionary<string, string>();
+        private Store Storage { get; set; } = new Store();
         
         private object writeLock = new object();
 
@@ -95,7 +95,7 @@ namespace Hanssens.Net
             if (string.IsNullOrEmpty(serializedContent)) return;
 
             Storage.Clear();
-            Storage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serializedContent);
+            Storage = JsonConvert.DeserializeObject<Store>(serializedContent);
         }
 
         public void Store<T>(string key, T instance)
@@ -122,8 +122,6 @@ namespace Hanssens.Net
 
         public void Persist()
         {
-            if (!Storage.Any()) return;
-            
             var serialized = JsonConvert.SerializeObject(Storage, Formatting.Indented);
 
             var writemode = File.Exists(FileHelpers.GetLocalStoreFilePath(_config.Filename))
