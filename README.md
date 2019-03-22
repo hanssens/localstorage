@@ -6,6 +6,7 @@ LocalStorage is a simple utility that solves a common problem pragmatically - st
 
 ## Getting Started
 
+### Installing
 First, you might want to dive into the [examples in this document](#examples). Want more, have a look [at the tests](https://github.com/hanssens/localstorage-for-dotnet/tree/master/LocalStorage.Tests). 
 
 Once you're game, simply add it to your project [through NuGet](https://www.nuget.org/packages/LocalStorage).
@@ -17,6 +18,11 @@ NuGet Package Manager:
 NuGet CLI:
 
     $ nuget install LocalStorage
+
+### Prerequisites
+The LocalStorage library is built on **netstandard2.0**. This means it's compatible with .NET Core 2.x and up and traditional .NET 4.6.1 and higher. See the Microsoft [docs on .NET Standard compatibility](https://docs.microsoft.com/en-us/dotnet/standard/net-standard#net-platforms-support). 
+
+For traditional .NET 4.6.1+, you also need to have a more recent version of NuGet installed (NuGet v3.6 and up), which comes out-of-the-box with the latest updated versions of Visual Studio 2017 and [JetBrains Rider](https://www.jetbrains.com/rider/).
 
 ## If you've got an issue...
 
