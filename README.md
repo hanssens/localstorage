@@ -2,7 +2,10 @@
 
 ## What is LocalStorage?
 
-LocalStorage is a simple utility that solves a common problem pragmatically - storing and accessing objects quickly in a .NET app. It is designed with a specific vision in mind: provide a **simple solution for persisting objects**, even between sessions, that is unobtrusive and requires zero configuration.
+LocalStorage is a simple utility that solves a common problem pragmatically - storing and accessing objects quickly in a .NET app. It is designed with a specific vision in mind: provide a **simple solution for persisting objects**, even between sessions, that is unobtrusive and requires **zero configuration**.
+
+#### What is it NOT?
+Note that this library has absolutely nothing to do with [Window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) as you know it from web browsers and JavaScript. You cannot, and you arguably should not even want to, read/write data in the Window.localStorage browser space. 
 
 ## Getting Started
 
