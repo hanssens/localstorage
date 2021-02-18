@@ -170,6 +170,38 @@ namespace LocalStorageTests
             target1.Should().Be(value1);
             target2.Should().Be(value2);
         }
+        
+        [Fact(DisplayName = "LocalStorage.Remove() should delete existing key")]
+        public void LocalStorage_Remove_Should_Delete_Existing_Key()
+        {
+            // arrange - add key and verify its in memory
+            var storage = new LocalStorage();
+            var key = Guid.NewGuid().ToString();
+            var value = "Peter Weyland";
+            storage.Store(key, value);
+            storage.Exists(key).Should().BeTrue();
+
+            // act - remove key
+            storage.Remove(key);
+            
+            // assert - verify key has been removed
+            storage.Exists(key).Should().BeFalse();
+        }
+        
+        [Fact(DisplayName = "LocalStorage.Remove() should not break on non-existing key")]
+        public void LocalStorage_Remove_Should_Not_Break_On_NonExisting_Key()
+        {
+            // arrange - create instance and verify key doesn't exist already
+            var storage = new LocalStorage();
+            var key = Guid.NewGuid().ToString();
+            storage.Exists(key).Should().BeFalse(because: "expect key not to exist yet");
+
+            // act - remove key that doesn't exist, should still continue
+            storage.Remove(key);
+            
+            // assert
+            storage.Exists(key).Should().BeFalse(because: "key still should not exist");
+        }
 
         [Fact(DisplayName = "LocalStorage should remain intact between multiple instances")]
         public void LocalStorage_Should_Remain_Intact_Between_Multiple_Instances()

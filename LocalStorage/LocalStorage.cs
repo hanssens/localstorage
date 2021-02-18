@@ -142,6 +142,11 @@ namespace Hanssens.Net
             }
         }
 
+        public void Remove(string key)
+        {
+            Storage.Remove(key);
+        }
+
         public void Dispose()
         {
             if (_config.AutoSave)
