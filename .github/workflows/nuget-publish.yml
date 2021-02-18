@@ -3,6 +3,13 @@ on:
   push:
     branches:
       - master # Default release branch
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+
 jobs:
   publish:
     name: build, pack & publish
