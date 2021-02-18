@@ -1,2 +1,0 @@
-- name: publish NuGet
-  uses: brandedoutcast/publish-nuget@v2.5.5
