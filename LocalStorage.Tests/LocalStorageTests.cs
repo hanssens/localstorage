@@ -171,6 +171,30 @@ namespace LocalStorageTests
             target2.Should().Be(value2);
         }
         
+        [Fact(DisplayName = "LocalStorage.Store() should throw exception in readonly mode")]
+        public void LocalStorage_Store_Should_Throw_Exception_In_ReadOnly_Mode()
+        {
+            // arrange - create localstorage in read-only mode
+            var storage = new LocalStorage(new LocalStorageConfiguration() { ReadOnly = true });
+            var key = Guid.NewGuid().ToString();
+            var value = "Macho Man Randy Savage";
+
+            // act + assert
+            var target = Assert.Throws<LocalStorageException>(() => storage.Store(key, value));
+            target.Message.Should().Be(ErrorMessages.CannotExecuteStoreInReadOnlyMode);
+        }
+        
+        [Fact(DisplayName = "LocalStorage.Persist() should throw exception in readonly mode")]
+        public void LocalStorage_Persist_Should_Throw_Exception_In_ReadOnly_Mode()
+        {
+            // arrange - create localstorage in read-only mode
+            var storage = new LocalStorage(new LocalStorageConfiguration() { ReadOnly = true });
+
+            // act + assert
+            var target = Assert.Throws<LocalStorageException>(() => storage.Persist());
+            target.Message.Should().Be(ErrorMessages.CannotExecutePersistInReadOnlyMode);
+        }
+        
         [Fact(DisplayName = "LocalStorage.Remove() should delete existing key")]
         public void LocalStorage_Remove_Should_Delete_Existing_Key()
         {

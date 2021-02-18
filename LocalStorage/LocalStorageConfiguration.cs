@@ -35,5 +35,7 @@
         /// Filename for the persisted state on disk (defaults to ".localstorage").
         /// </summary>
         public string Filename { get; set; } = ".localstorage";
+
+        public bool ReadOnly { get; set; } = false;
     }
 }
