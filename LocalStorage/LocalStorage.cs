@@ -102,6 +102,8 @@ namespace Hanssens.Net
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
             if (instance == null) throw new ArgumentNullException(nameof(instance));
+            
+            if (_config.ReadOnly) throw new LocalStorageException(ErrorMessages.CannotExecuteStoreInReadOnlyMode);
 
             var value = JsonConvert.SerializeObject(instance);
 
@@ -122,17 +124,18 @@ namespace Hanssens.Net
 
         public void Persist()
         {
+            if (_config.ReadOnly) throw new LocalStorageException(ErrorMessages.CannotExecutePersistInReadOnlyMode);
+            
             var serialized = JsonConvert.SerializeObject(Storage, Formatting.Indented);
+            var filepath = FileHelpers.GetLocalStoreFilePath(_config.Filename);
 
-            var writemode = File.Exists(FileHelpers.GetLocalStoreFilePath(_config.Filename))
+            var writemode = File.Exists(filepath)
                 ? FileMode.Truncate
                 : FileMode.Create;
             
             lock (writeLock)
             {
-                using (var fileStream = new FileStream(FileHelpers.GetLocalStoreFilePath(_config.Filename), 
-                    mode: writemode, 
-                    access: FileAccess.Write))
+                using (var fileStream = new FileStream(filepath, mode: writemode, access: FileAccess.Write))
                 {
                     using (var writer = new StreamWriter(fileStream))
                     {
@@ -140,6 +143,11 @@ namespace Hanssens.Net
                     }
                 }
             }
+        }
+
+        public void Remove(string key)
+        {
+            Storage.Remove(key);
         }
 
         public void Dispose()

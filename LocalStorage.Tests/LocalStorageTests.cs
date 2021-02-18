@@ -148,6 +148,53 @@ namespace LocalStorageTests
             storage.Count.Should().Be(0);
         }
 
+        [Fact(DisplayName = "LocalStorage.Persist() should create file with custom filename on filesystem")]
+        public void LocalStorage_Persist_Should_Create_File_With_Custom_Filename_On_Filesystem()
+        {
+            // arrange - create random filename
+            var randomCustomFilename = $"{Guid.NewGuid().ToString("N")}.dat";
+            var config = new LocalStorageConfiguration() { Filename = randomCustomFilename };
+            var storage = new LocalStorage(config);
+            var key1 = Guid.NewGuid().ToString();
+            var value1 = "My kingdom for a file with a random name.";
+            storage.Store(key1, value1);
+            
+            // act
+            storage.Persist();
+
+            // assert
+            var expectedFilepath = FileHelpers.GetLocalStoreFilePath(randomCustomFilename);
+            File.Exists(expectedFilepath).Should().BeTrue(because: $"file '{expectedFilepath}'should be created during Persist()");
+            
+            // cleanup
+            storage.Destroy();
+            File.Exists(expectedFilepath).Should().BeFalse(because: $"file '{expectedFilepath} should be deleted after Destroy()");
+        }
+        
+        [Fact(DisplayName = "LocalStorage.Persist() should create file on filesystem")]
+        public void LocalStorage_Persist_Should_Create_File_On_Filesystem()
+        {
+            // arrange - expect file with default filename
+            var defaultFilename = new LocalStorageConfiguration().Filename;
+            var expectedFilepath = FileHelpers.GetLocalStoreFilePath(defaultFilename);
+            if (File.Exists(expectedFilepath)) File.Delete(expectedFilepath);
+            
+            var storage = new LocalStorage();
+            var key1 = Guid.NewGuid().ToString();
+            var value1 = "My kingdom for a file with a default name.";
+            storage.Store(key1, value1);
+            
+            // act
+            storage.Persist();
+
+            // assert
+            File.Exists(expectedFilepath).Should().BeTrue(because: $"file '{expectedFilepath}'should be created during Persist()");
+            
+            // cleanup
+            storage.Destroy();
+            File.Exists(expectedFilepath).Should().BeFalse(because: $"file '{expectedFilepath} should be deleted after Destroy()");
+        }
+
         [Fact(DisplayName = "LocalStorage.Persist() should leave previous entries intact")]
         public void LocalStorage_Persist_Should_Leave_Previous_Entries_Intact()
         {
@@ -169,6 +216,62 @@ namespace LocalStorageTests
             var target2 = storage.Get<string>(key2);
             target1.Should().Be(value1);
             target2.Should().Be(value2);
+        }
+        
+        [Fact(DisplayName = "LocalStorage.Store() should throw exception in readonly mode")]
+        public void LocalStorage_Store_Should_Throw_Exception_In_ReadOnly_Mode()
+        {
+            // arrange - create localstorage in read-only mode
+            var storage = new LocalStorage(new LocalStorageConfiguration() { ReadOnly = true });
+            var key = Guid.NewGuid().ToString();
+            var value = "Macho Man Randy Savage";
+
+            // act + assert
+            var target = Assert.Throws<LocalStorageException>(() => storage.Store(key, value));
+            target.Message.Should().Be(ErrorMessages.CannotExecuteStoreInReadOnlyMode);
+        }
+        
+        [Fact(DisplayName = "LocalStorage.Persist() should throw exception in readonly mode")]
+        public void LocalStorage_Persist_Should_Throw_Exception_In_ReadOnly_Mode()
+        {
+            // arrange - create localstorage in read-only mode
+            var storage = new LocalStorage(new LocalStorageConfiguration() { ReadOnly = true });
+
+            // act + assert
+            var target = Assert.Throws<LocalStorageException>(() => storage.Persist());
+            target.Message.Should().Be(ErrorMessages.CannotExecutePersistInReadOnlyMode);
+        }
+        
+        [Fact(DisplayName = "LocalStorage.Remove() should delete existing key")]
+        public void LocalStorage_Remove_Should_Delete_Existing_Key()
+        {
+            // arrange - add key and verify its in memory
+            var storage = new LocalStorage();
+            var key = Guid.NewGuid().ToString();
+            var value = "Peter Weyland";
+            storage.Store(key, value);
+            storage.Exists(key).Should().BeTrue();
+
+            // act - remove key
+            storage.Remove(key);
+            
+            // assert - verify key has been removed
+            storage.Exists(key).Should().BeFalse();
+        }
+        
+        [Fact(DisplayName = "LocalStorage.Remove() should not break on non-existing key")]
+        public void LocalStorage_Remove_Should_Not_Break_On_NonExisting_Key()
+        {
+            // arrange - create instance and verify key doesn't exist already
+            var storage = new LocalStorage();
+            var key = Guid.NewGuid().ToString();
+            storage.Exists(key).Should().BeFalse(because: "expect key not to exist yet");
+
+            // act - remove key that doesn't exist, should still continue
+            storage.Remove(key);
+            
+            // assert
+            storage.Exists(key).Should().BeFalse(because: "key still should not exist");
         }
 
         [Fact(DisplayName = "LocalStorage should remain intact between multiple instances")]

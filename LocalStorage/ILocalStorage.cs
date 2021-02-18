@@ -57,6 +57,15 @@ namespace Hanssens.Net
         /// Simply doesn't do anything if the file is not found on disk.
         /// </remarks>
         void Load();
+        
+        /// <summary>
+        /// Removes an object from the LocalStorage.
+        /// </summary>
+        /// <param name="key">Unique key for the object.</param>
+        /// <remarks>
+        /// Will ignore when the key does not exist.
+        /// </remarks>
+        void Remove(string key);
 
         /// <summary>
         /// Stores an object into the LocalStorage.

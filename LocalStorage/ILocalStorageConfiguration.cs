@@ -32,5 +32,10 @@
         /// Filename for the persisted state on disk (defaults to ".localstorage").
         /// </summary>
         string Filename { get; set; }
+        
+        /// <summary>
+        /// Indicates if the mode is set . Defaults to false, allowing writes.
+        /// </summary>
+        bool ReadOnly { get; set; }
     }
 }
