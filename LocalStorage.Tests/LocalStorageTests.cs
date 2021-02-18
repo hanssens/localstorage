@@ -148,6 +148,53 @@ namespace LocalStorageTests
             storage.Count.Should().Be(0);
         }
 
+        [Fact(DisplayName = "LocalStorage.Persist() should create file with custom filename on filesystem")]
+        public void LocalStorage_Persist_Should_Create_File_With_Custom_Filename_On_Filesystem()
+        {
+            // arrange - create random filename
+            var randomCustomFilename = $"{Guid.NewGuid().ToString("N")}.dat";
+            var config = new LocalStorageConfiguration() { Filename = randomCustomFilename };
+            var storage = new LocalStorage(config);
+            var key1 = Guid.NewGuid().ToString();
+            var value1 = "My kingdom for a file with a random name.";
+            storage.Store(key1, value1);
+            
+            // act
+            storage.Persist();
+
+            // assert
+            var expectedFilepath = FileHelpers.GetLocalStoreFilePath(randomCustomFilename);
+            File.Exists(expectedFilepath).Should().BeTrue(because: $"file '{expectedFilepath}'should be created during Persist()");
+            
+            // cleanup
+            storage.Destroy();
+            File.Exists(expectedFilepath).Should().BeFalse(because: $"file '{expectedFilepath} should be deleted after Destroy()");
+        }
+        
+        [Fact(DisplayName = "LocalStorage.Persist() should create file on filesystem")]
+        public void LocalStorage_Persist_Should_Create_File_On_Filesystem()
+        {
+            // arrange - expect file with default filename
+            var defaultFilename = new LocalStorageConfiguration().Filename;
+            var expectedFilepath = FileHelpers.GetLocalStoreFilePath(defaultFilename);
+            if (File.Exists(expectedFilepath)) File.Delete(expectedFilepath);
+            
+            var storage = new LocalStorage();
+            var key1 = Guid.NewGuid().ToString();
+            var value1 = "My kingdom for a file with a default name.";
+            storage.Store(key1, value1);
+            
+            // act
+            storage.Persist();
+
+            // assert
+            File.Exists(expectedFilepath).Should().BeTrue(because: $"file '{expectedFilepath}'should be created during Persist()");
+            
+            // cleanup
+            storage.Destroy();
+            File.Exists(expectedFilepath).Should().BeFalse(because: $"file '{expectedFilepath} should be deleted after Destroy()");
+        }
+
         [Fact(DisplayName = "LocalStorage.Persist() should leave previous entries intact")]
         public void LocalStorage_Persist_Should_Leave_Previous_Entries_Intact()
         {
