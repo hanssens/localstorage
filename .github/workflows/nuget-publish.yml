@@ -1,8 +1,5 @@
 name: nuget publish
 on:
-  push:
-    branches:
-      - master # Default release branch
   workflow_dispatch:
     inputs:
       logLevel:
