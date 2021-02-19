@@ -5,10 +5,11 @@
 LocalStorage is a simple utility that solves a common problem pragmatically - storing and accessing objects quickly in a .NET app. It is designed with a specific vision in mind: provide a **simple solution for persisting objects**, even between sessions, that is unobtrusive and requires **zero configuration**.
 
 #### What is it NOT?
-Note that this library has absolutely nothing to do with [Window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) as you know it from web browsers and JavaScript. You cannot, and you arguably should not even want to, read/write data in the Window.localStorage browser space. 
+Note that this library has absolutely nothing to do with [Window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) as you know it from web browsers and JavaScript. You cannot, and you arguably should not even want to, read/write data in the Window.localStorage browser space from outside the browser itself. 
 
 ## Getting Started
 
+### Installing
 First, you might want to dive into the [examples in this document](#examples). Want more, have a look [at the tests](https://github.com/hanssens/localstorage-for-dotnet/tree/master/LocalStorage.Tests). 
 
 Once you're game, simply add it to your project [through NuGet](https://www.nuget.org/packages/LocalStorage).
@@ -20,6 +21,11 @@ NuGet Package Manager:
 NuGet CLI:
 
     $ nuget install LocalStorage
+
+### Prerequisites
+The LocalStorage library is built on **netstandard2.0**. This means it's compatible with .NET Core 2.x and up and traditional .NET 4.6.1 and higher. See the Microsoft [docs on .NET Standard compatibility](https://docs.microsoft.com/en-us/dotnet/standard/net-standard#net-platforms-support). 
+
+For traditional .NET 4.6.1+, you also need to have a more recent version of NuGet installed (NuGet v3.6 and up), which comes out-of-the-box with the latest updated versions of Visual Studio 2017 and [JetBrains Rider](https://www.jetbrains.com/rider/).
 
 ## If you've got an issue...
 
